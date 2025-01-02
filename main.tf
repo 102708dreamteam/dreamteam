@@ -2,8 +2,8 @@ provider "aws" {
   region = "us-east-1" # Change to your preferred region
 }
 
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+data "aws_vpc" "main" {
+  id = "vpc-02cf170321bddb2d8"
 }
 
 resource "aws_subnet" "subnet1" {
