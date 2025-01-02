@@ -33,5 +33,8 @@ jobs:
 
     - name: Deploy HTML
       run: |
-        # Assuming you have a script to deploy your HTML files
-        ./deploy-html.sh
+        sudo apt-get update
+        sudo apt-get install -y apache2
+        sudo systemctl start apache2
+        sudo systemctl enable apache2
+        echo "${{ secrets.INDEX_HTML_CONTENT }}" > /var/www/html/index.html
