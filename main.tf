@@ -7,21 +7,21 @@ data "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "subnet1" {
-  vpc_id     = aws_vpc.main.id
+  vpc_id     = data.aws_vpc.main.id
   cidr_block = "10.0.1.0/24"
 }
 
 resource "aws_subnet" "subnet2" {
-  vpc_id     = aws_vpc.main.id
+  vpc_id     = data.aws_vpc.main.id
   cidr_block = "10.0.2.0/24"
 }
 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = data.aws_vpc.main.id
 }
 
 resource "aws_route_table" "rt" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = data.aws_vpc.main.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -40,7 +40,7 @@ resource "aws_route_table_association" "b" {
 }
 
 resource "aws_security_group" "web_sg" {
-  vpc_id = aws_vpc.main.id
+  vpc_id = data.aws_vpc.main.id
 
   ingress {
     from_port   = 80
@@ -84,7 +84,7 @@ resource "aws_lb_target_group" "web_tg" {
   name     = "web-tg-${random_id.tg_id.hex}"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  vpc_id   = data.aws_vpc.main.id
 }
 
 resource "random_id" "tg_id" {
