@@ -2,30 +2,46 @@ provider "aws" {
   region = "us-east-1" # Change to your preferred region
 }
 
-data "aws_vpc" "main" {
-  id = "vpc-02cf170321bddb2d8"
+data "aws_vpc" "existing" {
+  id = "vpc-02cf170321bddb2d8"  # Use your existing VPC ID
 }
 
 resource "aws_subnet" "subnet1" {
-  vpc_id     = data.aws_vpc.main.id
+  vpc_id     = data.aws_vpc.existing.id
   cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "MyCustomSubnet1"  # Optional: Name your subnet
+  }
 }
 
 resource "aws_subnet" "subnet2" {
-  vpc_id     = data.aws_vpc.main.id
+  vpc_id     = data.aws_vpc.existing.id
   cidr_block = "10.0.2.0/24"
+
+  tags = {
+    Name = "MyCustomSubnet2"  # Optional: Name your subnet
+  }
 }
 
 resource "aws_internet_gateway" "igw" {
-  vpc_id = data.aws_vpc.main.id
+  vpc_id = data.aws_vpc.existing.id
+
+  tags = {
+    Name = "MyCustomIGW"  # Optional: Name your internet gateway
+  }
 }
 
 resource "aws_route_table" "rt" {
-  vpc_id = data.aws_vpc.main.id
+  vpc_id = data.aws_vpc.existing.id
 
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
+  }
+
+  tags = {
+    Name = "MyCustomRouteTable"  # Optional: Name your route table
   }
 }
 
@@ -40,7 +56,7 @@ resource "aws_route_table_association" "b" {
 }
 
 resource "aws_security_group" "web_sg" {
-  vpc_id = data.aws_vpc.main.id
+  vpc_id = data.aws_vpc.existing.id
 
   ingress {
     from_port   = 80
@@ -54,6 +70,10 @@ resource "aws_security_group" "web_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "MyCustomWebSG"  # Optional: Name your security group
   }
 }
 
@@ -74,6 +94,10 @@ resource "aws_lb" "web_lb" {
   load_balancer_type = "application"
   security_groups    = [aws_security_group.web_sg.id]
   subnets            = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
+
+  tags = {
+    Name = "MyCustomLoadBalancer"  # Optional: Name your load balancer
+  }
 }
 
 resource "random_id" "lb_id" {
@@ -84,7 +108,11 @@ resource "aws_lb_target_group" "web_tg" {
   name     = "web-tg-${random_id.tg_id.hex}"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.main.id
+  vpc_id   = data.aws_vpc.existing.id
+
+  tags = {
+    Name = "MyCustomTargetGroup"  # Optional: Name your target group
+  }
 }
 
 resource "random_id" "tg_id" {
@@ -99,6 +127,10 @@ resource "aws_lb_listener" "web_listener" {
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.web_tg.arn
+  }
+
+  tags = {
+    Name = "MyCustomListener"  # Optional: Name your listener
   }
 }
 
@@ -123,6 +155,10 @@ resource "aws_iam_role" "ec2_role" {
       },
     ]
   })
+
+  tags = {
+    Name = "MyCustomEC2Role"  # Optional: Name your IAM role
+  }
 }
 
 resource "random_id" "role_id" {
