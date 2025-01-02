@@ -58,7 +58,7 @@ resource "aws_security_group" "web_sg" {
 }
 
 resource "aws_instance" "web" {
-  ami           = "ami-0c55b159cbfafe1f0" # Change to your preferred AMI
+  ami           = "ami-0004eadf6718241f0" # Change to your preferred AMI
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.subnet1.id
   security_groups = [aws_security_group.web_sg.name]
