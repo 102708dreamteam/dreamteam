@@ -134,33 +134,37 @@ resource "aws_iam_role_policy_attachment" "ec2_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 
+resource "aws_launch_template" "web_lt" {
+  name_prefix   = "web-lt-"
+  image_id      = "ami-0004eadf6718241f0" # Change to your preferred AMI
+  instance_type = "t2.micro"
+
+  vpc_security_group_ids = [aws_security_group.web_sg.id]
+
+  tag_specifications {
+    resource_type = "instance"
+    tags = {
+      Name = "WebServer"
+    }
+  }
+}
+
 resource "aws_autoscaling_group" "web_asg" {
-  launch_configuration = aws_launch_configuration.web_lc.id
-  min_size             = 1
-  max_size             = 3
   desired_capacity     = 2
+  max_size             = 3
+  min_size             = 1
   vpc_zone_identifier  = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
+
+  launch_template {
+    id      = aws_launch_template.web_lt.id
+    version = "$Latest"
+  }
 
   tag {
     key                 = "Name"
     value               = "WebServer"
     propagate_at_launch = true
   }
-}
-
-resource "aws_launch_configuration" "web_lc" {
-  name          = "web-lc-${random_id.lc_id.hex}"
-  image_id      = "ami-0004eadf6718241f0" # Change to your preferred AMI
-  instance_type = "t2.micro"
-  security_groups = [aws_security_group.web_sg.id]
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "random_id" "lc_id" {
-  byte_length = 8
 }
 
 resource "aws_route53_zone" "main" {
@@ -176,4 +180,3 @@ resource "aws_route53_record" "www" {
     zone_id                = aws_lb.web_lb.zone_id
     evaluate_target_health = true
   }
-}
