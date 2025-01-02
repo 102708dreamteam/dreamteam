@@ -180,3 +180,4 @@ resource "aws_route53_record" "www" {
     zone_id                = aws_lb.web_lb.zone_id
     evaluate_target_health = true
   }
+}
