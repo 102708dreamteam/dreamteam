@@ -11,7 +11,7 @@ resource "aws_instance" "web" {
   security_groups = [aws_security_group.web_sg.name]
 
   tags = {
-    Name = "WebServer"
+    Name = "travel"
   }
 }
 
