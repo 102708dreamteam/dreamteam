@@ -149,14 +149,18 @@ resource "aws_autoscaling_group" "web_asg" {
 }
 
 resource "aws_launch_configuration" "web_lc" {
-  name          = "web-lc"
-  image_id      = "ami-0c55b159cbfafe1f0" # Change to your preferred AMI
+  name          = "web-lc-${random_id.lc_id.hex}"
+  image_id      = "ami-0004eadf6718241f0" # Change to your preferred AMI
   instance_type = "t2.micro"
   security_groups = [aws_security_group.web_sg.id]
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "random_id" "lc_id" {
+  byte_length = 8
 }
 
 resource "aws_route53_zone" "main" {
