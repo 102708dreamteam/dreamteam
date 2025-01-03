@@ -4,6 +4,6 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = "b_bucket_08"
+  bucket = "b-bucket-08"
 }
 
