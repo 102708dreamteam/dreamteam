@@ -14,7 +14,6 @@ terraform {
 resource "aws_instance" "webserver" {
 ami = "ami-01816d07b1128cd2d"
 instance_type = "t2.micro"
-iam_instance_profile = aws_iam_instance_profile.web_profile.name
 }
 
 resource "aws_iam_role" "web_role" {
@@ -39,7 +38,7 @@ resource "aws_iam_role" "web_role" {
 
 resource "aws_iam_role_policy_attachment" "web_policy_attachment" {
   role       = aws_iam_role.web_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_instance_profile" "web_profile" {
