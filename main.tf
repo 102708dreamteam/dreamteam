@@ -1,12 +1,10 @@
-terraform {
-  backend "s3" {
-    bucket = "webapp"
-    key    = "terraform/state/terraform.tfstate"
-    region = "us-east-1"
-  }
-}
+
 provider "aws" {
   region = "us-east-1"
+}
+
+resource "aws_s3_bucket" "dreamteam" {
+  bucket = "Dreamteam"
 }
 
 resource "aws_instance" "web" {
