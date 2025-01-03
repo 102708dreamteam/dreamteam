@@ -3,7 +3,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "dreamteam" {
-  bucket = "Dream_102708"
+resource "aws_s3_bucket" "bucket" {
+  bucket = "b_bucket_08"
 }
 
