@@ -14,11 +14,11 @@ terraform {
 resource "aws_instance" "webserver" {
 ami = "ami-01816d07b1128cd2d"
 instance_type = "t2.micro"
-iam_instance_profile = aws_iam_instance_profile.web_profile.name
+iam_instance_profile = aws_iam_instance_profile.arya.name
 }
 
-resource "aws_iam_role" "web_role" {
-  name = "web_role"
+resource "aws_iam_role" "bhushan" {
+  name = "bhushan"
 
   assume_role_policy = <<-EOF
     {
@@ -38,11 +38,11 @@ resource "aws_iam_role" "web_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "web_policy_attachment" {
-  role       = aws_iam_role.web_role.name
+  role       = aws_iam_role.bhushan.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-resource "aws_iam_instance_profile" "web_profile" {
-  name = "web_profile"
-  role = aws_iam_role.web_role.name
+resource "aws_iam_instance_profile" "arya" {
+  name = "arya"
+  role = aws_iam_role.bhushan.name
 }
