@@ -15,3 +15,8 @@ resource "aws_instance" "webserver" {
 ami = "ami-01816d07b1128cd2d"
 instance_type = "t2.micro"
 }
+
+resource "aws_s3_bcket" "dreamteam" {
+name = "dream-123"
+
+}
