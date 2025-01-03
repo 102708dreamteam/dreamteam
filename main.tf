@@ -13,5 +13,5 @@ terraform {
 
 resource "aws_instance" "webserver" {
 ami = "ami-01816d07b1128cd2d"
-instance_type = "t2.macro"
+instance_type = "t2.micro"
 }
